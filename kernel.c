@@ -92,6 +92,22 @@ void scrolling() {
 	}
 }
 
+unsigned char inb(unsigned short port) {
+	unsigned char data;
+	__asm__ volatile (
+		"inb %1, %0"
+		:"=a" (data)
+		:"d" (port)
+	);
+	return data;
+}
+
+void keyboard() {
+	if (inb(0x64) & 1) {
+		word("A button was pressed! ");
+	}
+}
+
 void kernel_main() {
 	word("Welcome to Masons Kernel!");
 	set_color(blue);
@@ -103,5 +119,11 @@ void kernel_main() {
 	scrolling();
 	newline();
 	word("At this point the screen should have scrolled");
+	newline();
+	word("Time To test Buttons!!!");
+	newline();
+	while (1) {
+		keyboard();
+	}
 }
 // This is a test commit
