@@ -104,3 +104,4 @@ void kernel_main() {
 	newline();
 	word("At this point the screen should have scrolled");
 }
+// This is a test commit
