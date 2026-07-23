@@ -1,6 +1,6 @@
 int row = 0;
 int column = 0;
-int position = 0;
+int position = 0; //these 3 are for future, when I add support for cursor movement
 
 void position_nv(int column,int  row) {
 	column = 0;
