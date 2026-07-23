@@ -11,6 +11,7 @@ void newline() {
 }
 
 
+
 enum vga_color {
 	black = 0,
 	blue = 1,
@@ -76,6 +77,21 @@ void clear_screen() {
 	column = 0;
 }
 
+void scrolling() { 
+	int i = 0;
+	char *p = (char *)0xB8000;
+	while (i < 80) {
+		*(p + i * 2) = ' ';
+		*(p + i *2 + 1) = color;
+		i++;
+	}
+	
+	int r = 0;
+	for (r = 160; r < 2000; r++){
+		p[r-160] = p[r];
+	}
+}
+
 void kernel_main() {
 	word("Welcome to Masons Kernel!");
 	set_color(blue);
@@ -84,4 +100,7 @@ void kernel_main() {
 	newline();
 	word("This should test a manual newline");
 	word("NEW KERNEL 12345");
+	scrolling();
+	newline();
+	word("At this point the screen should have scrolled");
 }
