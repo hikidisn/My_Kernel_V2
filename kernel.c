@@ -1,16 +1,15 @@
 int row = 0;
 int column = 0;
-int position = 0; //these 3 are for future, when I add support for cursor movement
+int position = 0;
+int old = 0;
 
-void position_nv(int column,int  row) {
+void newline() {
+	row = 1 + old;
 	column = 0;
-	row = 0;
+	position = row * 80 + column;
+	old = row;
 }
-int position = nv_position(0,0);
-void newline(int skip) {
-	int skpamt = (skip * 80);
-	position_nv(skpamt, 0);
-}
+
 
 enum vga_color {
 	black = 0,
@@ -36,11 +35,12 @@ void tracker(char x, int  y) {
 	char *p = (char *)0xB8000;
 	*(p + position * 2) = x;
 	*(p + position * 2 + 1) = y;
-	if (column >= 80) {
-		newline(1);
+	if (column >= 79) {
+		newline();
 	}
 	else {
 		column++;
+		position++;
 	}
 }
 
@@ -72,11 +72,16 @@ void clear_screen() {
 		i++;
 	}
 	position = 0;
+	row = 0;
+	column = 0;
 }
 
 void kernel_main() {
 	word("Welcome to Masons Kernel!");
 	set_color(blue);
 	clear_screen();
-	word("clear screen works i guess");
+	word("clear screen works i guess, lets test automatic newlines... FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
+	newline();
+	word("This should test a manual newline");
+	word("NEW KERNEL 12345");
 }
